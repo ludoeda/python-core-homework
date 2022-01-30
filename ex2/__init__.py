@@ -1,4 +1,5 @@
 from ex2 import fetcher
+import time
 
 CALL_COUNT = 10
 
@@ -12,10 +13,25 @@ def benchmark(num):
     """
     def wrapper(func):
         # put your code here
-        pass
+        def innerWrapper(*args, **kwargs):
+            totalTime = 0
+
+            for n in range(num):
+                start = time.time()
+                func(*args, **kwargs)
+                end = time.time()
+                print(f'Время выполнения: {end - start}')
+                totalTime += end - start
+
+            print(f'Среднее время выполнения: {totalTime / num}')
+
+        return innerWrapper
+
     return wrapper
 
 
 @benchmark(CALL_COUNT)
 def fetch_page(url):
     fetcher.get(url)
+
+
